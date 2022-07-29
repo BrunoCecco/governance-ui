@@ -60,6 +60,7 @@ import FriktionClaimPendingWithdraw from './components/instructions/Friktion/Fri
 import MakeChangePerpMarket from './components/instructions/Mango/MakeChangePerpMarket'
 import MakeAddOracle from './components/instructions/Mango/MakeAddOracle'
 import MakeAddSpotMarket from './components/instructions/Mango/MakeAddSpotMarket'
+import CreateStream from './components/instructions/Streamflow/CreateStream'
 import MakeChangeSpotMarket from './components/instructions/Mango/MakeChangeSpotMarket'
 import MakeCreatePerpMarket from './components/instructions/Mango/MakeCreatePerpMarket'
 import useCreateProposal from '@hooks/useCreateProposal'
@@ -81,13 +82,20 @@ import GoblinGoldDeposit from './components/instructions/GoblinGold/GoblinGoldDe
 import GoblinGoldWithdraw from './components/instructions/GoblinGold/GoblinGoldWithdraw'
 import MakeSetMarketMode from './components/instructions/Mango/MakeSetMarketMode'
 import CreateGatewayPluginRegistrar from './components/instructions/GatewayPlugin/CreateRegistrar'
+import ConfigureGatewayPlugin from './components/instructions/GatewayPlugin/ConfigureGateway'
 import MakeChangeQuoteParams from './components/instructions/Mango/MakeChangeQuoteParams'
+import CreateTokenMetadata from './components/instructions/CreateTokenMetadata'
+import UpdateTokenMetadata from './components/instructions/UpdateTokenMetadata'
 import TypeaheadSelect from '@components/TypeaheadSelect'
 import { StyledLabel } from '@components/inputs/styles'
 import classNames from 'classnames'
 import MakeRemoveSpotMarket from './components/instructions/Mango/MakeRemoveSpotMarket'
 import MakeRemovePerpMarket from './components/instructions/Mango/MakeRemovePerpMarket'
 import MakeSwapSpotMarket from './components/instructions/Mango/MakeSwapSpotMarket'
+import MakeRemoveOracle from './components/instructions/Mango/MakeRemoveOracle'
+import SagaPreOrder from './components/instructions/Solana/SagaPhone/SagaPreOrder'
+import MakeDepositToMangoAccount from './components/instructions/Mango/MakeDepositToMangoAccount'
+import MakeDepositToMangoAccountCsv from './components/instructions/Mango/MakeDepositToMangoAccountCsv'
 
 const TITLE_LENGTH_LIMIT = 130
 
@@ -239,7 +247,8 @@ const New = () => {
                   ? getTimestampFromDays(instruction.customHoldUpTime)
                   : selectedGovernance?.account?.config
                       .minInstructionHoldUpTime,
-                prerequisiteInstructions: [],
+                prerequisiteInstructions:
+                  instruction.prerequisiteInstructions || [],
                 chunkSplitByDefault: instruction.chunkSplitByDefault || false,
                 signers: instruction.signers,
                 shouldSplitIntoSeparateTxs:
@@ -327,6 +336,8 @@ const New = () => {
             governance={governance}
           ></SplTokenTransfer>
         )
+      case Instructions.CreateStream:
+        return <CreateStream index={idx} governance={governance}></CreateStream>
       case Instructions.ChangeMakeDonation:
         return (
           <ChangeDonation index={idx} governance={governance}></ChangeDonation>
@@ -341,6 +352,8 @@ const New = () => {
         )
       case Instructions.Mint:
         return <Mint index={idx} governance={governance}></Mint>
+      case Instructions.SagaPreOrder:
+        return <SagaPreOrder index={idx} governance={governance}></SagaPreOrder>
       case Instructions.Base64:
         return <CustomBase64 index={idx} governance={governance}></CustomBase64>
       case Instructions.None:
@@ -420,6 +433,13 @@ const New = () => {
             index={idx}
             governance={governance}
           ></CreateGatewayPluginRegistrar>
+        )
+      case Instructions.ConfigureGatewayPlugin:
+        return (
+          <ConfigureGatewayPlugin
+            index={idx}
+            governance={governance}
+          ></ConfigureGatewayPlugin>
         )
       case Instructions.MangoAddOracle:
         return (
@@ -502,6 +522,27 @@ const New = () => {
             governance={governance}
           ></MakeSwapSpotMarket>
         )
+      case Instructions.MangoRemoveOracle:
+        return (
+          <MakeRemoveOracle
+            index={idx}
+            governance={governance}
+          ></MakeRemoveOracle>
+        )
+      case Instructions.DepositToMangoAccount:
+        return (
+          <MakeDepositToMangoAccount
+            index={idx}
+            governance={governance}
+          ></MakeDepositToMangoAccount>
+        )
+      case Instructions.DepositToMangoAccountCsv:
+        return (
+          <MakeDepositToMangoAccountCsv
+            index={idx}
+            governance={governance}
+          ></MakeDepositToMangoAccountCsv>
+        )
       case Instructions.ForesightInitMarket:
         return (
           <MakeInitMarketParams
@@ -571,6 +612,10 @@ const New = () => {
             governance={governance}
           ></CreateVsrRegistrar>
         )
+      case Instructions.CreateTokenMetadata:
+        return <CreateTokenMetadata index={idx} governance={governance} />
+      case Instructions.UpdateTokenMetadata:
+        return <UpdateTokenMetadata index={idx} governance={governance} />
       default:
         null
     }

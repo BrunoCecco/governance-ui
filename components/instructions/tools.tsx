@@ -18,11 +18,14 @@ import { VOTE_STAKE_REGISTRY_INSTRUCTIONS } from './programs/voteStakeRegistry'
 import { MARINADE_INSTRUCTIONS } from './programs/marinade'
 import { SOLEND_PROGRAM_INSTRUCTIONS } from './programs/solend'
 import { ATA_PROGRAM_INSTRUCTIONS } from './programs/associatedTokenAccount'
+import { STREAMFLOW_INSTRUCTIONS } from './programs/streamflow'
 import { governance as foresightGov } from '@foresight-tmp/foresight-sdk'
 import { ConnectionContext } from '@utils/connection'
 import { NFT_VOTER_INSTRUCTIONS } from './programs/nftVotingClient'
 import { PROGRAM_IDS } from '@castlefinance/vault-sdk'
 import { FORESIGHT_INSTRUCTIONS } from './programs/foresight'
+import { SAGA_PHONE } from './programs/SagaPhone'
+import { LIDO_INSTRUCTIONS } from './programs/lido'
 /**
  * Default governance program id instance
  */
@@ -242,12 +245,15 @@ export const INSTRUCTION_DESCRIPTORS = {
   ...MANGO_INSTRUCTIONS,
   ...RAYDIUM_INSTRUCTIONS,
   ...MARINADE_INSTRUCTIONS,
+  ...LIDO_INSTRUCTIONS,
   ...SOLEND_PROGRAM_INSTRUCTIONS,
   ...FORESIGHT_INSTRUCTIONS,
   ...ATA_PROGRAM_INSTRUCTIONS,
   ...SYSTEM_INSTRUCTIONS,
   ...VOTE_STAKE_REGISTRY_INSTRUCTIONS,
   ...NFT_VOTER_INSTRUCTIONS,
+  ...STREAMFLOW_INSTRUCTIONS,
+  ...SAGA_PHONE,
 }
 
 export async function getInstructionDescriptor(

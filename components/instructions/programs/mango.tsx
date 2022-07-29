@@ -373,9 +373,14 @@ export const MANGO_INSTRUCTIONS = {
                   {dayjs(est * 1000).format('h:mma')}
                 </div>
               </div>
+
               <div className="col-span-1 py-3">
                 <p className="mb-0">Period progress</p>
-                <div className="font-bold">{(progress * 100).toFixed(2)}%</div>
+                <div className="font-bold">
+                  {mngoPerPeriod.toNumber() && (
+                    <>{(progress * 100).toFixed(2)}%</>
+                  )}
+                </div>
               </div>
             </>
             {displayAllArgs(args, ['mngoPerPeriod'])}
@@ -557,6 +562,22 @@ export const MANGO_INSTRUCTIONS = {
         5: { name: 'Signer' },
         6: { name: 'nodeBanks' },
         7: { name: 'vaults' },
+      },
+      getDataUI: async (
+        _connection: Connection,
+        data: Uint8Array,
+        _accounts: AccountMetaData[]
+      ) => {
+        console.log(data)
+        return <></>
+      },
+    },
+    71: {
+      name: 'Mango v3: Remove Oracle',
+      accounts: {
+        0: { name: 'Mango Group' },
+        1: { name: 'Admin Pk' },
+        2: { name: 'Oracle' },
       },
       getDataUI: async (
         _connection: Connection,
