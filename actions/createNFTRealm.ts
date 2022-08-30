@@ -1,4 +1,6 @@
 import {
+  GoverningTokenConfigAccountArgs,
+  GoverningTokenType,
   SetRealmAuthorityAction,
   SYSTEM_PROGRAM_ID,
   withCreateTokenOwnerRecord,
@@ -107,10 +109,11 @@ export default async function createNFTRealm({
     transferCouncilMintAuthority,
     councilWalletPks,
 
-    additionalRealmPlugins: [
-      new PublicKey(nftPluginsPks[0]),
-      new PublicKey(nftPluginsPks[0]),
-    ],
+    communityTokenConfig: new GoverningTokenConfigAccountArgs({
+      voterWeightAddin: new PublicKey(nftPluginsPks[0]),
+      maxVoterWeightAddin: new PublicKey(nftPluginsPks[0]),
+      tokenType: GoverningTokenType.Liquid,
+    }),
   })
 
   console.log('NFT REALM realm public-key', realmPk.toBase58())
@@ -222,6 +225,7 @@ export default async function createNFTRealm({
   await withCreateTokenOwnerRecord(
     nftConfigurationInstructions,
     programIdPk,
+    programVersion,
     realmPk,
     walletPk,
     communityMintPk,

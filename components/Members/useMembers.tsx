@@ -21,7 +21,7 @@ import { usePrevious } from '@hooks/usePrevious'
 import { capitalize } from '@utils/helpers'
 import useMembersStore from 'stores/useMembersStore'
 export default function useMembers() {
-  const { tokenRecords, councilTokenOwnerRecords, realm } = useRealm()
+  const { tokenRecords, councilTokenOwnerRecords, realm, config } = useRealm()
   const connection = useWalletStore((s) => s.connection)
   const previousRealmPubKey = usePrevious(realm?.pubkey.toBase58()) as string
   const setMembers = useMembersStore((s) => s.setMembers)
@@ -54,11 +54,8 @@ export default function useMembers() {
       const ATAS: PublicKey[] = []
       //we filter out people who never voted and has tokens inside realm
       const communityTokenRecordsWallets = tokenRecordArray
-        .filter(
-          (x) =>
-            x.community?.account.totalVotesCount &&
-            x.community?.account.totalVotesCount > 0 &&
-            x.community.account.governingTokenDepositAmount.isZero()
+        .filter((x) =>
+          x.community?.account.governingTokenDepositAmount.isZero()
         )
         .map((x) => x.walletAddress)
       for (const walletAddress of communityTokenRecordsWallets) {
@@ -201,11 +198,6 @@ export default function useMembers() {
               ),
           }
         })
-        .filter((x) =>
-          x.hasCouncilTokenOutsideRealm || x.councilVotes.toNumber() > 0
-            ? true
-            : x.votesCasted > 0
-        )
         .sort((a, b) => {
           return a.votesCasted - b.votesCasted
         })
@@ -293,14 +285,14 @@ export default function useMembers() {
     if (
       realm?.pubkey &&
       previousRealmPubKey !== realm?.pubkey.toBase58() &&
-      !realm?.account.config.useCommunityVoterWeightAddin
+      !config?.account.communityTokenConfig.voterWeightAddin
     ) {
       handleSetMembers()
       getDelegates()
     }
     if (
       !realm?.pubkey ||
-      (realm.pubkey && realm?.account.config.useCommunityVoterWeightAddin)
+      (realm.pubkey && config?.account.communityTokenConfig.voterWeightAddin)
     ) {
       getDelegates()
       setMembers([])

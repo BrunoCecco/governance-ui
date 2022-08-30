@@ -3,7 +3,7 @@ import GovernedAccountsTabs from '@components/GovernedAccountsTabs'
 import PreviousRouteBtn from '@components/PreviousRouteBtn'
 import useRealm from '@hooks/useRealm'
 import { fmtMintAmount } from '@tools/sdk/units'
-import { MAX_TOKENS_TO_DISABLE } from '@tools/constants'
+import { DISABLED_VOTER_WEIGHT } from '@tools/constants'
 import { capitalize } from '@utils/helpers'
 import useGovernanceAssetsStore from 'stores/useGovernanceAssetsStore'
 import Tabs from '@components/Tabs'
@@ -27,7 +27,7 @@ import Tooltip from '@components/Tooltip'
 import { AccountType } from '@utils/uiTypes/assets'
 
 const Params = () => {
-  const { realm, mint } = useRealm()
+  const { realm, mint, config } = useRealm()
   const wallet = useWalletStore((s) => s.current)
   const {
     canUseAuthorityInstruction,
@@ -114,7 +114,7 @@ const Params = () => {
   }
   const minCommunityTokensToCreateGovernance =
     realmConfig &&
-    MAX_TOKENS_TO_DISABLE.eq(realmConfig.minCommunityTokensToCreateGovernance)
+    DISABLED_VOTER_WEIGHT.eq(realmConfig.minCommunityTokensToCreateGovernance)
       ? 'Disabled'
       : realmConfig?.minCommunityTokensToCreateGovernance &&
         fmtMintAmount(mint, realmConfig.minCommunityTokensToCreateGovernance)
@@ -248,14 +248,14 @@ const Params = () => {
                   padding
                   label="Use community voter weight add-in"
                   val={getYesNoString(
-                    realmConfig?.useCommunityVoterWeightAddin
+                    config?.account.communityTokenConfig.voterWeightAddin
                   )}
                 />
                 <AddressField
                   padding
                   label="Use max community voter weight add-in"
                   val={getYesNoString(
-                    realmConfig?.useMaxCommunityVoterWeightAddin
+                    config?.account.communityTokenConfig.maxVoterWeightAddin
                   )}
                 />
                 <div className="flex">

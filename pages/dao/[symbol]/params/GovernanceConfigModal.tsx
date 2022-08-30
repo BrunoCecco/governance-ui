@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import Modal from '@components/Modal'
 import Input from '@components/inputs/Input'
 import VoteBySwitch from '../proposal/components/VoteBySwitch'
@@ -29,7 +30,7 @@ import {
 } from '@tools/sdk/units'
 import { abbreviateAddress } from '@utils/formatting'
 import * as yup from 'yup'
-import { MAX_TOKENS_TO_DISABLE } from '@tools/constants'
+import { DISABLED_VOTER_WEIGHT } from '@tools/constants'
 
 interface GovernanceConfigForm extends BaseGovernanceFormFields {
   title: string
@@ -46,7 +47,7 @@ const GovernanceConfigModal = ({
   governance: ProgramAccount<Governance>
 }) => {
   const router = useRouter()
-  const { realm, canChooseWhoVote, symbol, mint } = useRealm()
+  const { realm, canChooseWhoVote, symbol, mint, realmInfo } = useRealm()
   const config = governance?.account.config
   const { fmtUrlWithCluster } = useQueryContext()
   const wallet = useWalletStore((s) => s.current)
@@ -59,8 +60,8 @@ const GovernanceConfigModal = ({
     title: '',
     description: '',
     minCommunityTokensToCreateProposal: mint
-      ? MAX_TOKENS_TO_DISABLE.eq(config?.minCommunityTokensToCreateProposal)
-        ? MAX_TOKENS_TO_DISABLE.toString()
+      ? DISABLED_VOTER_WEIGHT.eq(config?.minCommunityTokensToCreateProposal)
+        ? DISABLED_VOTER_WEIGHT.toString()
         : getMintDecimalAmountFromNatural(
             mint,
             config?.minCommunityTokensToCreateProposal
@@ -70,8 +71,8 @@ const GovernanceConfigModal = ({
       config?.minInstructionHoldUpTime
     ),
     maxVotingTime: getDaysFromTimestamp(config?.maxVotingTime),
-    voteThreshold: config?.voteThresholdPercentage.value,
-    voteTipping: config?.voteTipping,
+    voteThreshold: config?.communityVoteThreshold.value!,
+    voteTipping: config?.communityVoteTipping,
   })
   const handleSetForm = ({ propertyName, value }) => {
     setFormErrors({})
@@ -91,9 +92,13 @@ const GovernanceConfigModal = ({
         mintDecimals: mint!.decimals,
         voteTipping: form.voteTipping,
       }
-      const governanceConfig = getGovernanceConfig(governanceConfigValues)
+      const governanceConfig = getGovernanceConfig(
+        realmInfo?.programVersion!,
+        governanceConfigValues
+      )
       const instruction = await createSetGovernanceConfig(
         realm.owner,
+        realmInfo?.programVersion!,
         governance?.pubkey,
         governanceConfig
       )

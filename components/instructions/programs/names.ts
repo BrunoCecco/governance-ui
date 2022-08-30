@@ -15,6 +15,7 @@ export const GOVERNANCE_PROGRAM_NAMES = {
   smfjietFKFJ4Sbw1cqESBTpPhF4CwbMwN8kBEC1e5ui:
     'Strangemood Foundation Governance Program',
   GovHgfDPyQ1GwazJTDY2avSVY8GGcpmCapmmCsymRaGe: 'PSY DO Governance Program',
+  '7e75Nwsz8i5i4NiDa43CNzKJ4AeQGyRimha46VKTM1Ls': 'spl-governance v3 test',
 }
 
 // Well known program names displayed on the instruction card
@@ -39,12 +40,15 @@ export const PROGRAM_NAMES = {
   SysvarC1ock11111111111111111111111111111111: 'Sysvar: Clock',
   '4Q6WW2ouZ6V3iaNm56MTd5n2tnTm4C5fiH8miFHnAFHo':
     'Mango Voter Stake Registry Program',
+  VotEn9AWwTFtJPJSMV5F9jsMY6QwWM5qn3XP9PATGW7:
+    'PsyDO Voter Stake Registry Program',
   [foresightConsts.PROGRAM_ID]: 'Foresight Dex',
   ...GOVERNANCE_PROGRAM_NAMES,
 }
 
-export function getProgramName(programId: PublicKey) {
-  return PROGRAM_NAMES[programId.toBase58()]
+export function getProgramName(programId: PublicKey | string) {
+  const key = typeof programId === 'string' ? programId : programId.toBase58()
+  return PROGRAM_NAMES[key]
 }
 
 export function isGovernanceProgram(programId: PublicKey) {

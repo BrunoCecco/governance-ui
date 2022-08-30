@@ -118,19 +118,24 @@ const Realms = () => {
             placeholder={`Search DAOs...`}
             prefix={<SearchIcon className="w-5 h-5 text-fgd-3" />}
           />
-          <Button
-            className="whitespace-nowrap"
-            onClick={handleCreateRealmButtonClick}
-          >
-            Create DAO
-          </Button>
+          {!editingGrid && (
+            <Button
+              className="whitespace-nowrap"
+              onClick={handleCreateRealmButtonClick}
+            >
+              Create DAO
+            </Button>
+          )}
         </div>
       </div>
       <RealmsDashboard
-        realms={filteredRealms}
-        isSearching={searchString.length > 0}
+        realms={realms}
+        filteredRealms={filteredRealms}
         isLoading={isLoadingRealms}
         editing={editingGrid}
+        searching={searchString.length > 0}
+        clearSearch={() => filterDaos('')}
+        cluster={cluster}
       ></RealmsDashboard>
     </div>
   )

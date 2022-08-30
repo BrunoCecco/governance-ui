@@ -29,9 +29,11 @@ import {
 } from 'pyth-staking-api'
 import useGatewayPluginStore from '../GatewayPlugin/store/gatewayPluginStore'
 import { getGatekeeperNetwork } from '../GatewayPlugin/sdk/accounts'
+import { NFTWithMeta } from '@utils/uiTypes/VotePlugin'
 
 export const vsrPluginsPks: string[] = [
   '4Q6WW2ouZ6V3iaNm56MTd5n2tnTm4C5fiH8miFHnAFHo',
+  'VotEn9AWwTFtJPJSMV5F9jsMY6QwWM5qn3XP9PATGW7',
 ]
 
 export const nftPluginsPks: string[] = [
@@ -93,7 +95,7 @@ export function useVotingPlugins() {
   const currentClient = useVotePluginsClientStore(
     (s) => s.state.currentRealmVotingClient
   )
-  const currentPluginPk = config?.account.communityVoterWeightAddin
+  const currentPluginPk = config?.account.communityTokenConfig.voterWeightAddin
   const nftMintRegistrar = useVotePluginsClientStore(
     (s) => s.state.nftMintRegistrar
   )
@@ -298,23 +300,25 @@ export function useVotingPlugins() {
       setMaxVoterWeight(null)
     }
   }
-  const getIsFromCollection = (nft) => {
+  const getIsFromCollection = (nft: NFTWithMeta) => {
     return (
       nft.collection &&
       nft.collection.mintAddress &&
+      (nft.collection.verified ||
+        typeof nft.collection.verified === 'undefined') &&
       usedCollectionsPks.includes(nft.collection.mintAddress) &&
       nft.collection.creators?.filter((x) => x.verified).length > 0
     )
   }
   useEffect(() => {
     if (wallet) {
-      handleSetVsrClient(wallet, connection)
+      handleSetVsrClient(wallet, connection, currentPluginPk)
       handleSetNftClient(wallet, connection)
       handleSetSwitchboardClient(wallet, connection)
       handleSetGatewayClient(wallet, connection)
       handleSetPythClient(wallet, connection)
     }
-  }, [connection.endpoint, wallet])
+  }, [connection.endpoint, wallet, currentPluginPk])
 
   useEffect(() => {
     const handleVsrPlugin = () => {

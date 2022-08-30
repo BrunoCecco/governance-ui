@@ -5,11 +5,10 @@ import { MintInfo } from '@solana/spl-token'
 import { PublicKey, Keypair, TransactionInstruction } from '@solana/web3.js'
 import { getNameOf } from '@tools/core/script'
 import { SupportedMintName } from '@tools/sdk/solend/configuration'
-import { SplTokenUIName } from '@utils/splTokens'
 import { DepositWithMintAccount, Voter } from 'VoteStakeRegistry/sdk/accounts'
 import { LockupKind } from 'VoteStakeRegistry/tools/types'
 import { consts as foresightConsts } from '@foresight-tmp/foresight-sdk'
-import { AssetAccount } from '@utils/uiTypes/assets'
+import { AssetAccount, StakeAccount } from '@utils/uiTypes/assets'
 
 export interface UiInstruction {
   serializedInstruction: string
@@ -303,6 +302,18 @@ export interface MangoMakeChangeReferralFeeParams {
   refMngoRequired: number
 }
 
+export interface MangoMakeChangeReferralFeeParams2 {
+  governedAccount: AssetAccount | undefined
+  programId: string | undefined
+  mangoGroup: string | undefined
+  refSurchargeCentibps: number
+  refShareCentibps: number
+  refMngoRequired: number
+  refSurchargeCentibps2: number
+  refShareCentibps2: number
+  refMngoRequired2: number
+}
+
 export interface ForesightHasGovernedAccount {
   governedAccount: AssetAccount
 }
@@ -354,7 +365,7 @@ export interface SwitchboardRevokeOracleForm {
 
 export interface CreateAssociatedTokenAccountForm {
   governedAccount?: AssetAccount
-  splTokenMintUIName?: SplTokenUIName
+  splTokenMint?: string
 }
 
 export interface CreateSolendObligationAccountForm {
@@ -415,16 +426,23 @@ export enum Instructions {
   MangoChangeMaxAccounts,
   MangoChangePerpMarket,
   MangoChangeReferralFeeParams,
+  MangoChangeReferralFeeParams2,
   MangoChangeSpotMarket,
   MangoCreatePerpMarket,
-  CreateStream,
-  CancelStream,
   MangoSetMarketMode,
   MangoChangeQuoteParams,
   MangoRemoveSpotMarket,
   MangoRemovePerpMarket,
   MangoSwapSpotMarket,
   MangoRemoveOracle,
+  MangoV4TokenRegister,
+  MangoV4TokenEdit,
+  MangoV4PerpEdit,
+  MangoV4Serum3RegisterMarket,
+  MangoV4PerpCreate,
+  MangoV4TokenRegisterTrustless,
+  CreateStream,
+  CancelStream,
   Grant,
   Clawback,
   CreateAssociatedTokenAccount,
@@ -465,6 +483,12 @@ export enum Instructions {
   SagaPreOrder,
   DepositToMangoAccount,
   DepositToMangoAccountCsv,
+  StakeValidator,
+  DeactivateValidatorStake,
+  WithdrawValidatorStake,
+  DifferValidatorStake,
+  EverlendDeposit,
+  EverlendWithdraw,
 }
 
 export type createParams = [
@@ -517,4 +541,22 @@ export interface ChangeNonprofit {
     solana_address: string
     ethereum_address: string
   }
+}
+
+export interface ValidatorStakingForm {
+  governedTokenAccount: AssetAccount | undefined
+  validatorVoteKey: string
+  amount: number
+  seed: number
+}
+
+export interface ValidatorDeactivateStakeForm {
+  governedTokenAccount: AssetAccount | undefined
+  stakingAccount: StakeAccount | undefined
+}
+
+export interface ValidatorWithdrawStakeForm {
+  governedTokenAccount: AssetAccount | undefined
+  stakingAccount: StakeAccount | undefined
+  amount: number
 }

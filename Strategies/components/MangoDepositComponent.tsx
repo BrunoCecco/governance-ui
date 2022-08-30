@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import {
   MangoAccount,
   MangoAccountLayout,
@@ -72,6 +73,7 @@ const MangoDepositComponent = ({
     mint,
     councilMint,
     symbol,
+    config,
   } = useRealm()
   const [isDepositing, setIsDepositing] = useState(false)
   const [
@@ -156,6 +158,7 @@ const MangoDepositComponent = ({
       await withCreateNativeTreasury(
         instructions,
         realm!.owner,
+        realmInfo?.programVersion!,
         governedTokenAccount!.governance!.pubkey,
         wallet!.publicKey!
       )
@@ -204,7 +207,7 @@ const MangoDepositComponent = ({
       const defaultProposalMint = voteByCouncil
         ? realm?.account.config.councilMint
         : !mint?.supply.isZero() ||
-          realm?.account.config.useMaxCommunityVoterWeightAddin
+          config?.account.communityTokenConfig.maxVoterWeightAddin
         ? realm!.account.communityMint
         : !councilMint?.supply.isZero()
         ? realm!.account.config.councilMint

@@ -61,6 +61,9 @@ import MakeChangePerpMarket from './components/instructions/Mango/MakeChangePerp
 import MakeAddOracle from './components/instructions/Mango/MakeAddOracle'
 import MakeAddSpotMarket from './components/instructions/Mango/MakeAddSpotMarket'
 import CreateStream from './components/instructions/Streamflow/CreateStream'
+import StakeValidator from './components/instructions/Validators/StakeValidator'
+import DeactivateValidatorStake from './components/instructions/Validators/DeactivateStake'
+import WithdrawValidatorStake from './components/instructions/Validators/WithdrawStake'
 import MakeChangeSpotMarket from './components/instructions/Mango/MakeChangeSpotMarket'
 import MakeCreatePerpMarket from './components/instructions/Mango/MakeCreatePerpMarket'
 import useCreateProposal from '@hooks/useCreateProposal'
@@ -96,6 +99,15 @@ import MakeRemoveOracle from './components/instructions/Mango/MakeRemoveOracle'
 import SagaPreOrder from './components/instructions/Solana/SagaPhone/SagaPreOrder'
 import MakeDepositToMangoAccount from './components/instructions/Mango/MakeDepositToMangoAccount'
 import MakeDepositToMangoAccountCsv from './components/instructions/Mango/MakeDepositToMangoAccountCsv'
+import TokenRegister from './components/instructions/Mango/MangoV4/TokenRegister'
+import EditToken from './components/instructions/Mango/MangoV4/EditToken'
+import PerpEdit from './components/instructions/Mango/MangoV4/PerpEdit'
+import Serum3RegisterMarket from './components/instructions/Mango/MangoV4/Serum3RegisterMarket'
+import PerpCreate from './components/instructions/Mango/MangoV4/PerpCreate'
+import TokenRegisterTrustless from './components/instructions/Mango/MangoV4/TokenRegisterTrustless'
+import DepositForm from './components/instructions/Everlend/DepositForm'
+import WithdrawForm from './components/instructions/Everlend/WithdrawForm'
+import MakeChangeReferralFeeParams2 from './components/instructions/Mango/MakeChangeReferralFeeParams2'
 
 const TITLE_LENGTH_LIMIT = 130
 
@@ -126,8 +138,7 @@ const New = () => {
   const { handleCreateProposal } = useCreateProposal()
   const { fmtUrlWithCluster } = useQueryContext()
   const { symbol, realm, realmDisplayName, canChooseWhoVote } = useRealm()
-
-  const { getAvailableInstructions } = useGovernanceAssets()
+  const { getAvailableInstructions, assetAccounts } = useGovernanceAssets()
   const availableInstructions = getAvailableInstructions()
   const { fetchRealmGovernance } = useWalletStore((s) => s.actions)
   const [voteByCouncil, setVoteByCouncil] = useState(false)
@@ -142,6 +153,7 @@ const New = () => {
   ] = useState<ProgramAccount<Governance> | null>(null)
   const [isLoadingSignedProposal, setIsLoadingSignedProposal] = useState(false)
   const [isLoadingDraft, setIsLoadingDraft] = useState(false)
+
   const isLoading = isLoadingSignedProposal || isLoadingDraft
   //   const customInstructionFilterForSelectedGovernance = (
   //     instructionType: Instructions
@@ -222,7 +234,14 @@ const New = () => {
       form
     )
 
-    const instructions: UiInstruction[] = await handleGetInstructions()
+    let instructions: UiInstruction[] = []
+    try {
+      instructions = await handleGetInstructions()
+    } catch (e) {
+      handleTurnOffLoaders()
+      notify({ type: 'error', message: `${e}` })
+      throw e
+    }
 
     let proposalAddress: PublicKey | null = null
     if (!realm) {
@@ -327,6 +346,23 @@ const New = () => {
     setGovernance(governedAccount)
   }, [instructionsData])
 
+  useEffect(() => {
+    if (
+      typeof router.query['i'] === 'string' &&
+      availableInstructions.length &&
+      instructionsData[0]?.type === undefined
+    ) {
+      const instructionType = parseInt(router.query['i'], 10) as Instructions
+      const instruction = availableInstructions.find(
+        (i) => i.id === instructionType
+      )
+
+      if (instruction) {
+        setInstructionType({ value: instruction, idx: 0 })
+      }
+    }
+  }, [router.query, availableInstructions, instructionsData])
+
   const getCurrentInstruction = ({ typeId, idx }) => {
     switch (typeId) {
       case Instructions.Transfer:
@@ -338,6 +374,24 @@ const New = () => {
         )
       case Instructions.CreateStream:
         return <CreateStream index={idx} governance={governance}></CreateStream>
+      case Instructions.StakeValidator:
+        return (
+          <StakeValidator index={idx} governance={governance}></StakeValidator>
+        )
+      case Instructions.DeactivateValidatorStake:
+        return (
+          <DeactivateValidatorStake
+            index={idx}
+            governance={governance}
+          ></DeactivateValidatorStake>
+        )
+      case Instructions.WithdrawValidatorStake:
+        return (
+          <WithdrawValidatorStake
+            index={idx}
+            governance={governance}
+          ></WithdrawValidatorStake>
+        )
       case Instructions.ChangeMakeDonation:
         return (
           <ChangeDonation index={idx} governance={governance}></ChangeDonation>
@@ -351,7 +405,19 @@ const New = () => {
           <CreateAssociatedTokenAccount index={idx} governance={governance} />
         )
       case Instructions.Mint:
-        return <Mint index={idx} governance={governance}></Mint>
+        return (
+          <Mint
+            index={idx}
+            governance={governance}
+            initialMintAccount={
+              typeof router.query['m'] === 'string' && assetAccounts.length
+                ? assetAccounts.find(
+                    (acc) => acc.pubkey.toBase58() === router.query['m']
+                  )
+                : undefined
+            }
+          />
+        )
       case Instructions.SagaPreOrder:
         return <SagaPreOrder index={idx} governance={governance}></SagaPreOrder>
       case Instructions.Base64:
@@ -473,6 +539,13 @@ const New = () => {
             governance={governance}
           ></MakeChangeReferralFeeParams>
         )
+      case Instructions.MangoChangeReferralFeeParams2:
+        return (
+          <MakeChangeReferralFeeParams2
+            index={idx}
+            governance={governance}
+          ></MakeChangeReferralFeeParams2>
+        )
       case Instructions.MangoChangeSpotMarket:
         return (
           <MakeChangeSpotMarket
@@ -529,12 +602,36 @@ const New = () => {
             governance={governance}
           ></MakeRemoveOracle>
         )
+      case Instructions.MangoV4TokenRegister:
+        return (
+          <TokenRegister index={idx} governance={governance}></TokenRegister>
+        )
+      case Instructions.MangoV4TokenEdit:
+        return <EditToken index={idx} governance={governance}></EditToken>
       case Instructions.DepositToMangoAccount:
         return (
           <MakeDepositToMangoAccount
             index={idx}
             governance={governance}
           ></MakeDepositToMangoAccount>
+        )
+      case Instructions.MangoV4PerpEdit:
+        return <PerpEdit index={idx} governance={governance}></PerpEdit>
+      case Instructions.MangoV4PerpCreate:
+        return <PerpCreate index={idx} governance={governance}></PerpCreate>
+      case Instructions.MangoV4Serum3RegisterMarket:
+        return (
+          <Serum3RegisterMarket
+            index={idx}
+            governance={governance}
+          ></Serum3RegisterMarket>
+        )
+      case Instructions.MangoV4TokenRegisterTrustless:
+        return (
+          <TokenRegisterTrustless
+            index={idx}
+            governance={governance}
+          ></TokenRegisterTrustless>
         )
       case Instructions.DepositToMangoAccountCsv:
         return (
@@ -616,6 +713,10 @@ const New = () => {
         return <CreateTokenMetadata index={idx} governance={governance} />
       case Instructions.UpdateTokenMetadata:
         return <UpdateTokenMetadata index={idx} governance={governance} />
+      case Instructions.EverlendDeposit:
+        return <DepositForm index={idx} governance={governance} />
+      case Instructions.EverlendWithdraw:
+        return <WithdrawForm index={idx} governance={governance} />
       default:
         null
     }

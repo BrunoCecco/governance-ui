@@ -1,6 +1,6 @@
 import useRealm from '@hooks/useRealm'
 import { fmtMintAmount } from '@tools/sdk/units'
-import { MAX_TOKENS_TO_DISABLE } from '@tools/constants'
+import { DISABLED_VOTER_WEIGHT } from '@tools/constants'
 import {
   getFormattedStringFromDays,
   SECS_PER_DAY,
@@ -18,7 +18,7 @@ const ParamsView = ({ activeGovernance, openGovernanceProposalModal }) => {
   const minCommunityTokensToCreateProposal = activeGovernance?.account?.config
     ?.minCommunityTokensToCreateProposal
     ? mint &&
-      MAX_TOKENS_TO_DISABLE.eq(
+      DISABLED_VOTER_WEIGHT.eq(
         activeGovernance.account.config.minCommunityTokensToCreateProposal
       )
       ? 'Disabled'
@@ -74,7 +74,7 @@ const ParamsView = ({ activeGovernance, openGovernanceProposalModal }) => {
           <AddressField
             label="Vote Threshold Percentage"
             padding
-            val={`${activeGovernance.account.config.voteThresholdPercentage.value}%`}
+            val={`${activeGovernance.account.config.communityVoteThreshold.value}%`}
           />
           <AddressField
             label="Vote Tipping"

@@ -53,6 +53,7 @@ const EverlendWithdraw = ({
     councilMint,
     ownVoterWeight,
     symbol,
+    config,
   } = useRealm()
   const { canUseTransferInstruction } = useGovernanceAssets()
   const [voteByCouncil, setVoteByCouncil] = useState(false)
@@ -101,7 +102,7 @@ const EverlendWithdraw = ({
       const defaultProposalMint = voteByCouncil
         ? realm?.account.config.councilMint
         : !mint?.supply.isZero() ||
-          realm?.account.config.useMaxCommunityVoterWeightAddin
+          config?.account.communityTokenConfig.maxVoterWeightAddin
         ? realm!.account.communityMint
         : !councilMint?.supply.isZero()
         ? realm!.account.config.councilMint
@@ -129,10 +130,11 @@ const EverlendWithdraw = ({
         governedTokenAccount!.governance!.account!.proposalCount,
         false,
         connection,
+        wallet!,
         client
       )
       const url = fmtUrlWithCluster(
-        `/dao/${symbol}/proposal/${proposalAddress}`
+        `/dao/${symbol}/proposal/${proposalAddress[0]}`
       )
       router.push(url)
     } catch (e) {
@@ -184,9 +186,14 @@ const EverlendWithdraw = ({
         description={proposalInfo.description}
         defaultTitle={proposalTitle}
         defaultDescription={`Withdraw ${tokenSymbol} from Everlend`}
-        setTitle={(evt) => setProposalInfo((prev) => ({ ...prev, title: evt }))}
+        setTitle={(evt) =>
+          setProposalInfo((prev) => ({ ...prev, title: evt.target.value }))
+        }
         setDescription={(evt) =>
-          setProposalInfo((prev) => ({ ...prev, description: evt }))
+          setProposalInfo((prev) => ({
+            ...prev,
+            description: evt.target.value,
+          }))
         }
         voteByCouncil={voteByCouncil}
         setVoteByCouncil={setVoteByCouncil}

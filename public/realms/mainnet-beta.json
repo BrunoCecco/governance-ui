@@ -21,6 +21,37 @@
     "sortRank": 3
   },
   {
+    "symbol": "PSY",
+    "displayName": "Psy Finance",
+    "programId": "GovHgfDPyQ1GwazJTDY2avSVY8GGcpmCapmmCsymRaGe",
+    "realmId": "FiG6YoqWnVzUmxFNukcRVXZC51HvLr6mts8nxcm7ScR8",
+    "website": "https://psyoptions.io",
+    "keywords": "PsyOptions, PsyFi, PsyFinance, REALM, Governance, Serum, SRM, DEX, DEFI, Decentralized Finance, Decentralised Finance, Crypto, ERC20, Ethereum, Decentralize, Solana, SOL, SPL, Cross-Chain, Trading, Fastest, Fast, SerumBTC, SerumUSD, Tokens, Options, Vaults",
+    "twitter": "@PsyOptions",
+    "ogImage": "https://user-images.githubusercontent.com/32071703/149460918-3694084f-2a37-4c95-93d3-b5aaf078d444.png",
+    "sortRank": 3
+  },
+  {
+    "symbol": "MangoLiquidityDAO",
+    "displayName": "Mango Liquidity Council",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "DnWHRVRbA2XGwWth2da7iF3Q81cqRHhqJXSPS8J3G6fo",
+    "website": "https://mango.markets",
+    "keywords": "Mango Markets, REALM, Governance, Serum, SRM, Serum DEX, DEFI, Decentralized Finance, Decentralised Finance, Crypto, ERC20, Ethereum, Decentralize, Solana, SOL, SPL, Cross-Chain, Trading, Fastest, Fast, SerumBTC, SerumUSD, SRM Tokens, SPL Tokens",
+    "twitter": "@mangomarkets",
+    "ogImage": "https://trade.mango.markets/assets/icons/logo.svg"
+  },
+  {
+    "symbol": "MangolanaCouncil",
+    "displayName": "Mangolana Council",
+    "programId": "GqTPL6qRf5aUuqscLh8Rg2HTxPUXfhhAXDptTLhp1t2J",
+    "realmId": "Eb69t8zTkNbBViLRykbgBofr8PbwvZoAX4KicVcNNwkj",
+    "website": "https://mango.markets",
+    "keywords": "Mango Markets, REALM, Governance, Serum, SRM, Serum DEX, DEFI, Decentralized Finance, Decentralised Finance, Crypto, ERC20, Ethereum, Decentralize, Solana, SOL, SPL, Cross-Chain, Trading, Fastest, Fast, SerumBTC, SerumUSD, SRM Tokens, SPL Tokens",
+    "twitter": "@mangomarkets",
+    "ogImage": "/realms/MangoXSol/img/logo.svg"
+  },
+  {
     "symbol": "DTP",
     "displayName": "The Imperium of Rain",
     "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
@@ -37,16 +68,6 @@
     "website": "https://unchain.fund",
     "twitter": "@Unchainfund",
     "sharedWalletId": "BnBe9uwucnLWpKqzgtvGU2aURRXezcqEVCoL8L6CeDgF"
-  },
-  {
-    "symbol": "MangoLiquidityDAO",
-    "displayName": "Mango Liquidity Council",
-    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
-    "realmId": "DnWHRVRbA2XGwWth2da7iF3Q81cqRHhqJXSPS8J3G6fo",
-    "website": "https://mango.markets",
-    "keywords": "Mango Markets, REALM, Governance, Serum, SRM, Serum DEX, DEFI, Decentralized Finance, Decentralised Finance, Crypto, ERC20, Ethereum, Decentralize, Solana, SOL, SPL, Cross-Chain, Trading, Fastest, Fast, SerumBTC, SerumUSD, SRM Tokens, SPL Tokens",
-    "twitter": "@mangomarkets",
-    "ogImage": "https://trade.mango.markets/assets/icons/logo.svg"
   },
   {
     "symbol": "WEZ",
@@ -132,16 +153,6 @@
     "website": "https://www.chimpions.co/",
     "twitter": "@TheChimpions",
     "ogImage": "/realms/Chiao/img/chiao.png"
-  },
-  {
-    "symbol": "PSY",
-    "displayName": "Psy Finance",
-    "programId": "GovHgfDPyQ1GwazJTDY2avSVY8GGcpmCapmmCsymRaGe",
-    "realmId": "FiG6YoqWnVzUmxFNukcRVXZC51HvLr6mts8nxcm7ScR8",
-    "website": "https://psyoptions.io",
-    "keywords": "PsyOptions, PsyFi, PsyFinance, REALM, Governance, Serum, SRM, DEX, DEFI, Decentralized Finance, Decentralised Finance, Crypto, ERC20, Ethereum, Decentralize, Solana, SOL, SPL, Cross-Chain, Trading, Fastest, Fast, SerumBTC, SerumUSD, Tokens, Options, Vaults",
-    "twitter": "@PsyOptions",
-    "ogImage": "https://user-images.githubusercontent.com/32071703/149460918-3694084f-2a37-4c95-93d3-b5aaf078d444.png"
   },
   {
     "symbol": "SOCEAN",
@@ -845,6 +856,16 @@
     "website": "https://flipsidecrypto.xyz/",
     "twitter": "@flipsidecrypto",
     "ogImage": "/realms/FSLOGO/FLIPSIDE-LOGO-WHITE.png"
+    },
+    {
+    "symbol": "Dean's List",
+    "displayName": "Dean's List",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "9mS8GuMx2MkZGMSwa2k87HNLTFZ1ssa9mJ1RkGFKcGyQ",
+    "bannerImage": "/realms/Dean's List Grape/deans list logo.png",
+    "website": "https://deans-list.strataprotocol.com/",
+    "twitter": "@GrapeDeanslist",
+    "ogImage": "/realms/Dean's List Grape/deans list logo.png"
   },
   {
     "symbol": "GrapeCCSubDAO",
@@ -854,8 +875,8 @@
     "website": "https://services.grapes.network/",
     "twitter": "@grapeprotocol",
     "ogImage": "/realms/GrapeCCSubDAO/GrapeCCSubDAO.png"
-  },
-  {
+   },
+   {
     "symbol": "AthensDAO",
     "displayName": "AthensDAO",
     "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
@@ -910,5 +931,32 @@
     "website": "https://cygnusorg.com/",
     "twitter": "@Cygnusorg",
     "ogImage": "/realms/Cygnus/cygnus-logo.jpg"
+  },
+  {
+    "symbol": "BAC",
+    "displayName": "Bulls Army Club DAO",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "7gyTpxaZS8W1oPXFD9vYkZntKNDst4A3LWD25CPJLTRr",
+    "ogImage": "/realms/bacDao/logo_bulls.png",
+    "website": "https://bullsarmyclub.com/"
+  },
+  {
+    "symbol": "EPCT",
+    "displayName": "Epics",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "DCdCsuUjg6MnULfEmBUmvg1heggnLrKSFdp5uTRSKuwR",
+    "website": "https://epics.dev/",
+    "twitter": "@EpicsDAO",
+    "ogImage": "/realms/Epics/Epics-logo.svg"
+  },
+  {
+    "symbol": "OPANZ",
+    "displayName": "OPANZ",
+    "programId": "GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw",
+    "realmId": "Gp34fkwEyMhyK1Bjhr4iCdf4CdieUULvDqSrKxyRDu5e",
+    "bannerImage": "/realms/OPANZ/OPANZ_Banner.png",
+    "ogImage": "/realms/OPANZ/OPANZ_Logo.png",
+    "website": "https://auturoa.nz/",
+    "twitter": "@OPANZ999"
   }
 ]

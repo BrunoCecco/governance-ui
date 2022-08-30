@@ -160,6 +160,8 @@ export const HIDDEN_GOVERNANCES = new Map<string, string>([
 // TODO: Add this to on-chain metadata to Proposal account
 export const HIDDEN_PROPOSALS = new Map<string, string>([
   ['E8XgiVpDJgDf4XgBKjZnMs3S1K7cmibtbDqjw5aNobCZ', ''],
+  ['DrhhwYXaY4fvTBoQdNtgwEoTjuQswvDQLfVcgUXgP1Mx', ''],
+  ['CfbCUF7cn6UdWRsGPUUtj4CKMBL7qNCdF1WunED4gYA4', ''],
 ])
 
 export const DEFAULT_NATIVE_SOL_MINT =
@@ -168,8 +170,9 @@ export const DEFAULT_NATIVE_SOL_MINT =
 export const DEFAULT_NFT_TREASURY_MINT =
   'GNFTm5rz1Kzvq94G7DJkcrEUnCypeQYf7Ya8arPoHWvw'
 
-export function getAccountName(accountPk: PublicKey) {
-  return ACCOUNT_NAMES[accountPk.toBase58()] ?? getProgramName(accountPk)
+export function getAccountName(accountPk: PublicKey | string) {
+  const key = typeof accountPk === 'string' ? accountPk : accountPk.toBase58()
+  return ACCOUNT_NAMES[key] ?? getProgramName(accountPk)
 }
 
 export const CHAT_PROGRAM_ID = new PublicKey(

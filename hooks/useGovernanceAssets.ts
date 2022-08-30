@@ -16,7 +16,7 @@ export default function useGovernanceAssets() {
   const auxiliaryTokenAccounts = useGovernanceAssetsStore(
     (s) => s.assetAccounts
   ).filter((x) => x.type === AccountType.AuxiliaryToken)
-  const currentPluginPk = config?.account.communityVoterWeightAddin
+  const currentPluginPk = config?.account.communityTokenConfig.voterWeightAddin
   const governancesArray = useGovernanceAssetsStore((s) => s.governancesArray)
 
   const getGovernancesByAccountType = (type: GovernanceAccountType) => {
@@ -242,6 +242,31 @@ export default function useGovernanceAssets() {
       isVisible: canUseTokenTransferInstruction,
     },
     {
+      id: Instructions.StakeValidator,
+      name: 'Stake A Validator',
+      isVisible: canUseAnyInstruction,
+    },
+    {
+      id: Instructions.DeactivateValidatorStake,
+      name: 'Deactivate validator stake',
+      isVisible: canUseAnyInstruction,
+    },
+    {
+      id: Instructions.WithdrawValidatorStake,
+      name: 'Withdraw validator stake',
+      isVisible: canUseAnyInstruction,
+    },
+    {
+      id: Instructions.EverlendDeposit,
+      name: 'Everlend Deposit Funds',
+      isVisible: canUseAnyInstruction,
+    },
+    {
+      id: Instructions.EverlendWithdraw,
+      name: 'Everlend Withdraw Funds',
+      isVisible: canUseAnyInstruction,
+    },
+    {
       id: Instructions.None,
       name: 'None',
       isVisible:
@@ -307,6 +332,11 @@ export default function useGovernanceAssets() {
       isVisible: canUseProgramUpgradeInstruction && symbol === 'MNGO',
     },
     {
+      id: Instructions.MangoChangeReferralFeeParams2,
+      name: 'Mango: Change Referral Fee Params V2',
+      isVisible: canUseProgramUpgradeInstruction && symbol === 'MNGO',
+    },
+    {
       id: Instructions.MangoChangeMaxAccounts,
       name: 'Mango: Change Max Accounts',
       isVisible: canUseProgramUpgradeInstruction && symbol === 'MNGO',
@@ -350,6 +380,36 @@ export default function useGovernanceAssets() {
       id: Instructions.MangoRemoveOracle,
       name: 'Mango: Remove Oracle',
       isVisible: canUseProgramUpgradeInstruction && symbol === 'MNGO',
+    },
+    {
+      id: Instructions.MangoV4TokenRegister,
+      name: 'Mango v4: Token Register',
+      isVisible: canUseAnyInstruction && symbol === 'MNGO',
+    },
+    {
+      id: Instructions.MangoV4TokenEdit,
+      name: 'Mango v4: Token Edit',
+      isVisible: canUseAnyInstruction && symbol === 'MNGO',
+    },
+    {
+      id: Instructions.MangoV4TokenRegisterTrustless,
+      name: 'Mango v4: Token Register Trustless',
+      isVisible: canUseAnyInstruction && symbol === 'MNGO',
+    },
+    {
+      id: Instructions.MangoV4PerpCreate,
+      name: 'Mango v4: Perp Create',
+      isVisible: canUseAnyInstruction && symbol === 'MNGO',
+    },
+    {
+      id: Instructions.MangoV4PerpEdit,
+      name: 'Mango v4: Perp Edit',
+      isVisible: canUseAnyInstruction && symbol === 'MNGO',
+    },
+    {
+      id: Instructions.MangoV4Serum3RegisterMarket,
+      name: 'Mango v4: Serum 3 Register Market',
+      isVisible: canUseAnyInstruction && symbol === 'MNGO',
     },
     {
       id: Instructions.DepositToMangoAccount,

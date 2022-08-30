@@ -8,9 +8,8 @@ import useRealm from '@hooks/useRealm'
 import useVotePluginsClientStore from 'stores/useVotePluginsClientStore'
 import useWalletStore from 'stores/useWalletStore'
 import tokenService from '@utils/services/token'
-import BN from 'bn.js'
+
 import {
-  fmtMintAmount,
   getMintMinAmountAsDecimal,
   getMintNaturalAmountFromDecimalAsBN,
 } from '@tools/sdk/units'
@@ -32,6 +31,7 @@ interface IProps {
   createProposalFcn: CreateEverlendProposal
   governedTokenAccount: AssetAccount
   depositedAmount: number
+  maxDepositAmount: number
 }
 
 const EverlendDeposit = ({
@@ -39,6 +39,7 @@ const EverlendDeposit = ({
   createProposalFcn,
   governedTokenAccount,
   depositedAmount,
+  maxDepositAmount,
 }: IProps) => {
   const [amount, setAmount] = useState(0)
   const tokenSymbol = tokenService.getTokenInfo(
@@ -64,6 +65,7 @@ const EverlendDeposit = ({
     councilMint,
     ownVoterWeight,
     symbol,
+    config,
   } = useRealm()
   const [voteByCouncil, setVoteByCouncil] = useState(false)
   const client = useVotePluginsClientStore(
@@ -74,17 +76,11 @@ const EverlendDeposit = ({
 
   const { canUseTransferInstruction } = useGovernanceAssets()
 
-  const treasuryAmount = new BN(
-    governedTokenAccount.isSol
-      ? governedTokenAccount.extensions.amount!.toNumber()
-      : governedTokenAccount.extensions.token!.account.amount
-  )
-
   const mintInfo = governedTokenAccount.extensions?.mint?.account
 
   const mintMinAmount = mintInfo ? getMintMinAmountAsDecimal(mintInfo) : 1
   const currentPrecision = precision(mintMinAmount)
-  const maxAmountFormatted = fmtMintAmount(mintInfo, treasuryAmount)
+  const maxAmountFormatted = maxDepositAmount.toFixed(4)
 
   const handleDeposit = async () => {
     const isValid = await validateInstruction({
@@ -111,7 +107,7 @@ const EverlendDeposit = ({
       const defaultProposalMint = voteByCouncil
         ? realm?.account.config.councilMint
         : !mint?.supply.isZero() ||
-          realm?.account.config.useMaxCommunityVoterWeightAddin
+          config?.account.communityTokenConfig.maxVoterWeightAddin
         ? realm!.account.communityMint
         : !councilMint?.supply.isZero()
         ? realm!.account.config.councilMint
@@ -139,10 +135,11 @@ const EverlendDeposit = ({
         governedTokenAccount!.governance!.account!.proposalCount,
         false,
         connection,
+        wallet!,
         client
       )
       const url = fmtUrlWithCluster(
-        `/dao/${symbol}/proposal/${proposalAddress}`
+        `/dao/${symbol}/proposal/${proposalAddress[0]}`
       )
       router.push(url)
     } catch (e) {
@@ -198,9 +195,14 @@ const EverlendDeposit = ({
         description={proposalInfo.description}
         defaultTitle={proposalTitle}
         defaultDescription={`Deposit ${tokenSymbol} into Everlend to mint cTokens and earn interest`}
-        setTitle={(evt) => setProposalInfo((prev) => ({ ...prev, title: evt }))}
+        setTitle={(evt) => {
+          setProposalInfo((prev) => ({ ...prev, title: evt.target.value }))
+        }}
         setDescription={(evt) =>
-          setProposalInfo((prev) => ({ ...prev, description: evt }))
+          setProposalInfo((prev) => ({
+            ...prev,
+            description: evt.target.value,
+          }))
         }
         voteByCouncil={voteByCouncil}
         setVoteByCouncil={setVoteByCouncil}
